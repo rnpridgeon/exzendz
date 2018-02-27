@@ -43,11 +43,13 @@ func Index(ctx *fasthttp.RequestCtx) {
 
 func GetOrganizations(ctx *fasthttp.RequestCtx) {
 	if Authenticated(ctx) {
+		ctx.Response.Header.Add("Access-Control-Allow-Origin", Origin)
 		ds.ExportOrganizations(ctx)
 	}
 }
 
 func GetOrganizationTickets(ctx *fasthttp.RequestCtx) {
+	ctx.Response.Header.Add("Access-Control-Allow-Origin", Origin)
 	if Authenticated(ctx) {
 		orgid, _ := strconv.ParseInt(ctx.UserValue("id").(string), 10, 64)
 		ds.ExportOrganizationTickets(orgid, ctx)
