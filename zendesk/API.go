@@ -59,19 +59,19 @@ type User struct {
 }
 
 type Cluster struct {
-	ID int64 `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
-	OrganizationID int64 `json:"organization_id,omitempty"`
-	Nodes int`json:"nodes,omitempty"`
-	Stage string `json:"stage,omitempty"`
-	Version string `json:"version,omitempty"`
-	Java string `json:"jre, omitempty"`
+	ID             int64  `json:"id,omitempty"`
+	Name           string `json:"name,omitempty"`
+	OrganizationID int64  `json:"organization_id,omitempty"`
+	Nodes          int    `json:"nodes,omitempty"`
+	Stage          string `json:"stage,omitempty"`
+	Version        string `json:"version,omitempty"`
+	Java           string `json:"jre, omitempty"`
 }
 
 type Adoption struct {
-	OrganizationID	int64 `json:"organizaton_id,omitempty"`
-	Component string `json:"product,omitempty"`
-	stage string `json:"stage,omitempty"`
+	OrganizationID int64  `json:"organizaton_id,omitempty"`
+	Component      string `json:"product,omitempty"`
+	stage          string `json:"stage,omitempty"`
 }
 
 type Error400 struct {
