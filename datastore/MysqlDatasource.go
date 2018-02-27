@@ -67,7 +67,7 @@ func (ds *Datasource) ExportOrganizations(ctx *fasthttp.RequestCtx) {
 	if !ds.get("Organizations", ctx) {
 		var Organizations []OrganizationView
 
-		fmt.Println(ds.dbClient.Select(&Organizations, "SELECT * FROM OrganizationView ORDER BY OrganizationView.id"))
+		fmt.Println(ds.dbClient.Select(&Organizations, "SELECT * FROM OrganizationView WHERE OrganizationView.Name not like '%deleted%' ORDER BY OrganizationView.id"))
 
 		val, err := json.Marshal(Organizations)
 
