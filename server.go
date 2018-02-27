@@ -10,6 +10,7 @@ import (
 
 	"github.com/rnpridgeon/exzenzd/datastore"
 	"github.com/rnpridgeon/utils/configuration"
+	"os"
 )
 
 var (
@@ -19,7 +20,10 @@ var (
 
 type Config struct {
 	//ZDconf *zendesk.ZendeskConfig `json:"zendesk"`
-	DBconf *datastore.Config `json:"database"`
+	Port     string            `json:"listener"`
+	KeyFile  string            `json:"keyFile"`
+	CertFile string            `json:"certFile"`
+	DBconf   *datastore.Config `json:"database"`
 }
 
 const Origin = " https://cops-tooling.herokuapp.com"
@@ -54,10 +58,11 @@ func main() {
 	var err error
 	var conf Config
 
-	//configuration.FromFile(os.Args[1])(&conf)
-	configuration.FromFile("./exclude/conf.json")(&conf)
-
-	InitAuthenticator("exclude/firebase-conf.json")
+	if len(os.Args) != 3 {
+		log.Fatalf("usage %s [exzenzd config] [authenticator config]\n", os.Args[0])
+	}
+	configuration.FromFile(os.Args[1])(&conf)
+	InitAuthenticator(os.Args[2])
 
 	if err != nil {
 		log.Fatalf("error initializing app: %v", err)
@@ -68,9 +73,7 @@ func main() {
 	router := fasthttprouter.New()
 	router.GET("/", Index)
 	router.GET("/api/:api/organizations/:id/tickets.json", GetOrganizationTickets)
-	//router.OPTIONS("/api/:api/organizations/:id/tickets.json", ConfigCORS)
 	router.GET("/api/:api/organizations.json", GetOrganizations)
-	//router.OPTIONS("/api/:api/organizations.json",ConfigCORS)
 	router.OPTIONS("/*opts", ConfigCORS)
-	log.Fatal(fasthttp.ListenAndServeTLS(":8080", "exclude/server.crt", "exclude/server.key", router.Handler))
+	log.Fatal(fasthttp.ListenAndServeTLS(conf.Port, conf.CertFile, conf.KeyFile, router.Handler))
 }
